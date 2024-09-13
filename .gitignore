@@ -3,6 +3,7 @@ mongo-data/
 
 # MongoDB seed data
 mongo-seed/lvb/*
+!mongo-seed/lvb/.gitkeep
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
