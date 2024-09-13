@@ -1,0 +1,18 @@
+# MongoDB data
+mongo-data/
+
+# MongoDB seed data
+mongo-seed/lvb/*
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python cache files
+__pycache__/
+
+# macOS
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
