@@ -1,6 +1,0 @@
-pyspark
-pymongo[srv]
-matplotlib
-seaborn
-pandas
-numpy

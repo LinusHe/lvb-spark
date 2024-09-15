@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   mongo:
-    image: mongo:latest
+    image: mongo:7.0
     container_name: mongo
     volumes:
       - ./mongo-data:/data/db
-      - ./mongo-seed:/mongo-seed
+      - ./mongo-seed:/docker-entrypoint-initdb.d
     command: mongod --bind_ip_all
     ports:
       - "27017:27017"
@@ -15,72 +15,24 @@ services:
     restart: unless-stopped
 
   mongo-seed:
-    image: mongo:latest
+    build: ./mongo-seed
     depends_on:
       - mongo
-    volumes:
-      - ./mongo-seed:/mongo-seed
-    entrypoint: >
-      bash -c '
-        sleep 10;
-        if ! mongosh --host mongo --port 27017 --eval "db.getCollectionNames().length > 0" --quiet; then
-          echo "Database is empty. Importing data...";
-          mongorestore --host mongo --port 27017 /mongo-seed;
-        else
-          echo "Database already contains data. Skipping import.";
-        fi
-      '
     networks:
       - spark-network
 
-  spark-master:
-    image: bitnami/spark:3.3.2
-    container_name: spark-master
-    environment:
-      - SPARK_MODE=master
-      - SPARK_NO_DAEMONIZE=yes
-    ports:
-      - "8080:8080"
-      - "7077:7077"
-    networks:
-      - spark-network
-    restart: unless-stopped
-
-  spark-worker:
-    image: bitnami/spark:3.3.2
-    container_name: spark-worker
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=4G
-      - SPARK_WORKER_CORES=2
-      - SPARK_NO_DAEMONIZE=yes
-    depends_on:
-      - spark-master
-    networks:
-      - spark-network
-    restart: unless-stopped
-
-  jupyter:
-    build: ./jupyter
-    container_name: jupyter
+  spark:
+    build: ./spark/
+    container_name: spark
     ports:
       - "8888:8888"
+      - "4040-4049:4040-4049"
     volumes:
-      - ./notebooks:/home/jovyan/lvb-spark
-      - ./requirements.txt:/tmp/requirements.txt
-    environment:
-      - SPARK_MASTER=spark://spark-master:7077
-    depends_on:
-      - spark-master
-      - spark-worker
+      - ./notebooks:/opt/spark/lvb-notebooks
     networks:
       - spark-network
-    command: >
-      bash -c "
-        pip install -r /tmp/requirements.txt &&
-        start-notebook.sh --NotebookApp.token='' --NotebookApp.password='' --ip='0.0.0.0' --port=8888 --no-browser
-      "
+    depends_on:
+      - mongo
 
 networks:
   spark-network:
