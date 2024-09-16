@@ -28,7 +28,7 @@ services:
       - "8888:8888"
       - "4040-4049:4040-4049"
     volumes:
-      - ./notebooks:/opt/spark/lvb-notebooks
+      - ./notebooks:/usr/local/spark/notebooks
     networks:
       - spark-network
     depends_on:
