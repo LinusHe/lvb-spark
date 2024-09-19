@@ -35,6 +35,9 @@ services:
       - spark-network
     depends_on:
       - mongo
+    environment:
+      - SPARK_DRIVER_MEMORY=4g
+      - SPARK_EXECUTOR_MEMORY=4g
 
 networks:
   spark-network:
