@@ -16,6 +16,8 @@ services:
 
   mongo-seed:
     build: ./mongo-seed
+    volumes:
+      - ./mongo-seed:/data/seed
     depends_on:
       - mongo
     networks:
