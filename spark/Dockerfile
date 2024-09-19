@@ -14,4 +14,4 @@ RUN pip install --upgrade pip && \
 ENV NOTEBOOK_DIR=/usr/local/spark/notebooks
 
 # Start Jupyter Notebook in the new directory
-CMD jupyter-lab --allow-root --no-browser --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=${NOTEBOOK_DIR}
+CMD jupyter-lab --allow-root --no-browser --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=${NOTEBOOK_DIR} --allow_remote_access=true --NotebookApp.disable_check_xsrf=True
