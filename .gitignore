@@ -22,3 +22,5 @@ __pycache__/
 # Ignore all .parquet files and folders
 *.parquet
 parquet/
+
+.csv
