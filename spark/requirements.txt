@@ -4,3 +4,5 @@ pandas
 pyyaml
 pymongo
 matplotlib
+folium
+ipywidgets
